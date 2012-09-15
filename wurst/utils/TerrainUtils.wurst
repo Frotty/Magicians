@@ -8,7 +8,6 @@ package TerrainUtils
     public class TerrainUtils
         static constant real maxHeight = 10000.
         static rect worldRect = GetWorldBounds()
-        static location tempLoc = Location( 0., 0. )
         static real     minWorldX
         static real     minWorldY
         static real     maxWorldX

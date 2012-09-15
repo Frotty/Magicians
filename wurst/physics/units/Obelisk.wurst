@@ -20,6 +20,7 @@ package Obelisk
         print( "initializing Obelisks.." )
         real distanceFromMid = ( MAX_TILES - 1.5 ) * TILE_SECTION_LENGTH
         real distanceFromPoint = TILE_SECTION_LENGTH
+        CreateUnit( Player(12), OBELISK_ID, 0, 0, 0 )
         for int i = 0 to 3
             real angle = i * 90. + 45. 
             real x = polarProjectionXD( 0., distanceFromMid, angle )

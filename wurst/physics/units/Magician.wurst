@@ -42,6 +42,7 @@ package Magician
             real angle = 180 + (360/PlayerData.size) * i
             pd.mainUnit = new Magician( polarProjectionXD( 0., distance, angle), polarProjectionYD( 0., distance, angle), 500., angle - 180, pd.p )
             i++
+            pd = pd.next
         print( "initializing Magicians..done!" )
     
 
