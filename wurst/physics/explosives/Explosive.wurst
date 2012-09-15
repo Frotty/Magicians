@@ -13,7 +13,7 @@ package Explosive
 		boolean timed = false
 		real timeout = 0.
 	
-	public class StaticExplosive extends Entity
+	public abstract class StaticExplosive extends Entity
 		use Explosive
 		
 		construct( real x, real y, real radius, real burstRadius, real power, boolean activated, boolean timed )
@@ -24,7 +24,8 @@ package Explosive
 			
 			this.activated = activated
 			this.timed = timed
-
+			
+		
 		override function update()
 			if timed and activated
 				timeout -= ANIMATION_PERIOD
@@ -34,7 +35,7 @@ package Explosive
 		function explode()
 			skip
 			
-	public class DynamicExplosive extends DynamicEntity
+	public abstract class DynamicExplosive extends DynamicEntity
 		use Explosive
 		
 		construct( real x, real y, real radius, real burstRadius, real power, boolean activated, boolean timed )

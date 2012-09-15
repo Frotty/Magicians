@@ -9,10 +9,13 @@ package Projectile
 		SPIN
 		HOMING
 	
-	public class Projectile extends DynamicEntity
+	public abstract class Projectile extends DynamicEntity
 		Fx fx
 		
 		Movement movement = Movement.FREE
+		
+		real time = 0.
+		boolean timed = false
 		
 		vec3 spinCenter
 		real spinDistance = 0.
@@ -28,6 +31,11 @@ package Projectile
 			fx.setZ(z)
 			
 		override function update()
+			super.update()
+			if timed
+				time -= ANIMATION_PERIOD
+				if time <= 0
+					onTimeout()
 			switch movement
 				case Movement.FREE
 					position += velocity
@@ -37,10 +45,26 @@ package Projectile
 					airAngle += spinSpeedAir
 				case Movement.HOMING
 					skip
+					
 				
 			fx.setX(position.x)
 			fx.setY(position.y)
 			fx.setZ(position.z - getTerrainZ(position.x, position.y) )
+			
+		abstract function onTimeout()
+			
+		function setTimed( real timeout )
+			timed = true
+			time = timeout
+			
+		function setAngleD( real angle )
+			groundAngle = angle * DEGTORAD
+			
+		function setAngleR( real angle )
+			groundAngle = angle
+			
+		function setSpeed( real speed )
+			setForce(Cos(groundAngle)*speed, Sin(groundAngle)*speed, Sin(airAngle)*speed)
 			
 		function setSpinning( vec3 spinTarget, real dist, real groundSpinSpeed, real angleGround, real airSpinSpeed, real angleAir )
 			movement = Movement.SPIN
@@ -58,5 +82,8 @@ package Projectile
 			let startZVelocity = ((gravity.z * t) / 2 - position.z/t + e/t)
 			
 			this.setForce( Cos(angle) * speed, Sin(angle) * speed, startZVelocity )
+			
+		ondestroy
+			destroy fx
 		
 endpackage

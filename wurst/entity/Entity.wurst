@@ -3,7 +3,7 @@ package Entity
 	import public EntityManagement
 	import LinkedListModule
 	import Debug
-	import MapBounds
+	import Arena
 	import Terrain
 	
 	public enum Side
@@ -12,7 +12,7 @@ package Entity
 		BOTTOM
 		TOP
 	
-	public class Entity
+	public abstract class Entity
 		use LinkedListModule
 		
 		vec3 position
@@ -22,6 +22,7 @@ package Entity
 		real terrainZ
 		
 		boolean active = true
+		boolean done = false
 		
 		construct( real x, real y, real z, real radius )
 			position = vec3(x,y,z)
@@ -30,36 +31,37 @@ package Entity
 			currentEntityCount++
 			print("current Entities: " + currentEntityCount.toString() )
 			
+			
 		function outOfBounds(Side side)
 			switch side
 				case Side.LEFT
-					position.x = minx + 1.
+					position.x = currentArena.minX + 1.
 				case Side.RIGHT
-					position.x = maxx - 1.
+					position.x = currentArena.maxX - 1.
 				case Side.BOTTOM
-					position.y = miny + 1.
+					position.y = currentArena.minY + 1.
 				case Side.TOP
-					position.y = maxy - 1.
+					position.y = currentArena.maxY - 1.
+					
 					
 		function checkCollision( Entity e ) returns boolean
 			if (position.x-e.position.x).squared() + (position.y-e.position.y).squared() <= (radius+e.radius).squared()
 				return true
 			return false
 			
-		function onGround()
-			skip
+		abstract function onGround()
 			
-		function inAir()
-			skip
+		abstract function inAir()
+
 		
 		function update()
-			if position.x < minx
+			if position.x < currentArena.minX
 				outOfBounds( Side.LEFT )
-			else if position.x > maxx
+			else if position.x > currentArena.maxX
 				outOfBounds( Side.RIGHT )
-			else if position.y < miny
+			else if position.y < currentArena.minY
 				outOfBounds( Side.BOTTOM )
-			else if position.x > maxy
+			else if position.y > currentArena.maxY
 				outOfBounds( Side.TOP )
 				
 			terrainZ = getTerrainZ( position.x, position.y )
@@ -70,14 +72,15 @@ package Entity
 				inAir()
 			
 		ondestroy
+			print("yes")
 			currentEntityCount--
 	
 		
-	public class DynamicEntity extends Entity
+	public abstract class DynamicEntity extends Entity
 		vec3 velocity
 		
 		real factor = 1.
-		
+
 		construct( real x, real y, real z, real radius )
 			super(x,y,z, radius)
 			velocity = vec3(0,0,0)
@@ -89,10 +92,13 @@ package Entity
 		function setForce(real x, real y, real z)
 			velocity = vec3(x,y,z)
 			
+		override function update()
+			super.update()
+			position += velocity
+			
 			
 	public class UnitEntity extends DynamicEntity
 		unit actor
-		
 		
 		construct( real x, real y, real z, real radius, unit u )
 			super(x,y,z,radius)
@@ -111,6 +117,12 @@ package Entity
 		override function inAir()
 			super.inAir()
 			position = vec3( actor.getX(), actor.getY(), position.z )
+			
+		override function update()
+			super.update()
+			SetUnitX( actor, position.x )
+            SetUnitY( actor, position.y )
+            SetUnitFlyHeight( actor, position.z - getTerrainZ(position.x, position.y ), .0 )
 				
 			
 		ondestroy

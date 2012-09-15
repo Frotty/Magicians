@@ -23,8 +23,7 @@ package Arena
             halfY = minY + (maxY - minY)/2
             real x = (maxX - minX) - (maxX - minX)/2
             real y = (maxY - minY) - (maxY - minY)/2
-            centerPoint = vec3( x, y, getTerrainZ( x, y ) )
-            print( "X " + R2S(x) + " Y " + R2S(y) + " Z " + R2S(centerPoint.z ) )
+
             for int i = 0 to 12
                 FogModifierStart(CreateFogModifierRect( Player(i), FOG_OF_WAR_VISIBLE, worldRect, true, false ))
         

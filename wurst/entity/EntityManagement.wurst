@@ -16,7 +16,10 @@ package EntityManagement
 		Entity e = Entity.first
 		while e != null
 			if e.active
-				e.update()
+				if e.done
+					destroy e
+				else
+					e.update()
 			e = e.next
 			
 	public function addDeco(Entity e)

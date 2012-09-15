@@ -1,0 +1,9 @@
+package Collisions
+	import Lists
+	import Entity
+	
+	public LinkedList<Entity> collisionEntities = new LinkedList<Entity>()
+	
+
+
+endpackage

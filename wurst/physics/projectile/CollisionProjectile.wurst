@@ -1,0 +1,14 @@
+package CollisionProjectile
+
+	import Projectile
+	
+	public abstract class CollisionProjectile extends Projectile
+		
+		construct( real x, real y, real z, real radius, real angle, string sfxpath )
+			super( x, y, z, radius, angle, sfxpath )
+			
+		override function update()
+			
+			super.update()
+
+endpackage

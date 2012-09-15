@@ -1,0 +1,60 @@
+package ArcaneMissile
+    import SpellModule
+    import Entity
+    import PrintingHelper
+    import CollisionProjectile
+    import Arena
+    import Vectors
+    import Collisions
+    
+    constant real COLLISION_SIZE = 28.
+    constant real EXPLOSION_AOE = 128.
+    constant string SFX_PATH = "war3mapImported\\ArcaneMissile.mdx"
+    
+    public class ArcaneMissile extends CollisionProjectile
+        use SpellModule
+        
+        
+        construct( real x, real y, real z, string fxpath, real angle, real speed, real radius, player p )
+            super( x, y, z, radius, angle, fxpath )
+            print("arcane missile")
+            groundAngle = angle*DEGTORAD
+            owner = p
+            setTimed(0.4)
+            fx.setScale(.70)
+            setSpeed(speed)
+            
+        override function outOfBounds(Side side)
+        	done = true
+            
+        override function onTimeout()
+        	DestroyEffect(AddSpecialEffect( "Units\\NightElf\\Wisp\\WispExplode.mdl", position.x, position.y))
+            for Entity e in collisionEntities
+				if e.owner != owner and this.position.inCircle( e.position, EXPLOSION_AOE )
+					print("boom")
+			done = true
+
+		override function onGround()
+			
+		override function inAir()
+		
+        function onCollision(Entity e)
+            print("collided")
+            
+		ondestroy
+       		print("nooooo")
+        
+        override static function onCast()
+            print("casted")
+            unit u = GetSpellAbilityUnit()
+            real angle = angleBetweenCoordsD( GetUnitX(u), GetUnitY(u), GetSpellTargetX(), GetSpellTargetY() )
+            print ( R2S(angle) + "  " + R2S(angle*RADTODEG) )
+            ArcaneMissile n = new ArcaneMissile( GetUnitX(u), GetUnitY(u), 45., SFX_PATH , angle, 12., COLLISION_SIZE, GetOwningPlayer(u) )
+            print("created")
+            n.fx.setZAngle(90.)
+            
+    init
+        ArcaneMissile.setUpSpellEvent('Q001')
+        print("setup event Q")
+        
+endpackage

@@ -1,0 +1,20 @@
+package SpellModule
+    
+    public module SpellModule
+        static trigger t = null
+        static int spellId
+        
+        static function setUpSpellEvent(int id)
+            t = CreateTrigger()
+            TriggerRegisterAnyUnitEventBJ( t, EVENT_PLAYER_UNIT_SPELL_EFFECT )
+            TriggerAddCondition( t, Condition( function condition ) )
+            TriggerAddAction( t, function onCast )
+            
+            spellId = id
+    
+        private static function condition() returns boolean
+            return GetSpellAbilityId() == spellId
+            
+        abstract static function onCast()
+
+endpackage 

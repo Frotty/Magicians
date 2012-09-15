@@ -8,6 +8,7 @@ package Magician
     import ExtensionFunctions
     import Arena
     import Vectors
+    import Physics
     
     constant int MAGICIAN_ID = 'magi'
     constant real COLLISION_SIZE = 32.
@@ -20,17 +21,15 @@ package Magician
         
         construct(real x, real y, real z, real facing, player p) 
             super( x, y, z, COLLISION_SIZE, CreateUnit( p, MAGICIAN_ID , x, y, facing ) )
-            updatePosition()
             
         
         function onCollision(Entity e)
             
+        override function inAir()
+        	velocity += gravity
+        	super.inAir()
             
-        function updatePosition()
-            //print("magi set")
-            SetUnitX( actor, position.x )
-            SetUnitY( actor, position.y )
-            SetUnitFlyHeight( actor, position.z - getTerrainZ(position.x, position.y ), .0 )
+            
 
             
     public function initMagicians() //Do Shit
