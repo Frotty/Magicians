@@ -19,8 +19,8 @@ package Magician
         real dmgRecieved
         vec3 walkVelocity
         
-        construct(real x, real y, real z, real facing, player p) 
-            super( x, y, z, COLLISION_SIZE, CreateUnit( p, MAGICIAN_ID , x, y, facing ) )
+        construct(vec3 pos, real facing, player p) 
+            super(pos, COLLISION_SIZE, CreateUnit( p, MAGICIAN_ID , pos.x, pos.y, facing ) )
             
         
         function onCollision(Entity e)
@@ -39,7 +39,7 @@ package Magician
         int i = 0
         while pd != null
             real angle = 180 + (360/PlayerData.size) * i
-            pd.mainUnit = new Magician( polarProjectionXD( 0., distance, angle), polarProjectionYD( 0., distance, angle), 500., angle - 180, pd.p )
+            pd.mainUnit = new Magician( vec2(0,0).polarOffset(angle*bj_DEGTORAD, distance).withZ(500), angle - 180, pd.p )
             i++
             pd = pd.next
         print( "initializing Magicians..done!" )

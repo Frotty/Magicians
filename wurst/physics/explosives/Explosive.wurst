@@ -16,8 +16,8 @@ package Explosive
 	public abstract class StaticExplosive extends Entity
 		use Explosive
 		
-		construct( real x, real y, real radius, real burstRadius, real power, boolean activated, boolean timed )
-			super( x, y, 0., radius )
+		construct( vec2 pos, real radius, real burstRadius, real power, boolean activated, boolean timed )
+			super( pos.withZ(0) , radius )
 			
 			this.burstRadius = burstRadius
 			this.power = power
@@ -38,8 +38,8 @@ package Explosive
 	public abstract class DynamicExplosive extends DynamicEntity
 		use Explosive
 		
-		construct( real x, real y, real radius, real burstRadius, real power, boolean activated, boolean timed )
-			super( x, y, 0., radius )
+		construct(vec2 pos, real radius, real burstRadius, real power, boolean activated, boolean timed )
+			super( pos.withZ(0), radius )
 			
 			this.radius = radius
 			this.power = power

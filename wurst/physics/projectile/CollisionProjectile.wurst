@@ -1,11 +1,12 @@
 package CollisionProjectile
 
 	import Projectile
+	import Vectors
 	
 	public abstract class CollisionProjectile extends Projectile
 		
-		construct( real x, real y, real z, real radius, real angle, string sfxpath )
-			super( x, y, z, radius, angle, sfxpath )
+		construct( vec3 pos, real radius, real angle, string sfxpath )
+			super( pos, radius, angle, sfxpath )
 			
 		override function update()
 			

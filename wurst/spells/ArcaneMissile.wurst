@@ -15,8 +15,8 @@ package ArcaneMissile
         use OnPointCast
         
         
-        construct( real x, real y, real z, string fxpath, real angle, real speed, real radius, player p )
-            super( x, y, z, radius, angle, fxpath )
+        construct( vec3 pos, string fxpath, real angle, real speed, real radius, player p )
+            super( pos, radius, angle, fxpath )
             print("arcane missile")
             groundAngle = angle*DEGTORAD
             owner = p
@@ -45,8 +45,9 @@ package ArcaneMissile
        		print("nooooo")
         
         override static function onPointCast(unit caster, int level, vec2 target)
-        	let angle = caster.getPos().angleTo(target) * bj_RADTODEG
-            ArcaneMissile n = new ArcaneMissile( caster.getX(), caster.getY(), 45., SFX_PATH , angle, 12., COLLISION_SIZE, caster.getOwner() )
+        	let casterPos = caster.getPos()
+        	let angle = casterPos.angleTo(target) * bj_RADTODEG
+            ArcaneMissile n = new ArcaneMissile( casterPos.withZ(45), SFX_PATH , angle, 12., COLLISION_SIZE, caster.getOwner() )
             n.fx.setZAngle(90.)
             
     init
