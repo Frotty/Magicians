@@ -1,0 +1,27 @@
+package TerrainUtils
+
+    
+    public constant real MAX_TILES = 6.
+    public constant real ARENA_TILES = 9.
+    public constant real TILE_SECTION_LENGTH = 181.019336
+    
+    public class TerrainUtils
+        static constant real maxHeight = 10000.
+        static rect worldRect = GetWorldBounds()
+        static location tempLoc = Location( 0., 0. )
+        static real     minWorldX
+        static real     minWorldY
+        static real     maxWorldX
+        static real     maxWorldY
+        
+       
+    init
+        TerrainUtils.minWorldX = GetRectMinX(TerrainUtils.worldRect)
+        TerrainUtils.minWorldY = GetRectMinY(TerrainUtils.worldRect)
+        TerrainUtils.maxWorldX = GetRectMaxX(TerrainUtils.worldRect)
+        TerrainUtils.maxWorldY = GetRectMaxY(TerrainUtils.worldRect)
+
+
+    
+
+endpackage

@@ -1,0 +1,34 @@
+package Arena
+    import Vectors
+    import Terrain
+    import PlayerData
+    
+    public Arena currentArena
+    
+    public class Arena
+        vec3 centerPoint
+        real maxX
+        real maxY
+        real minX
+        real minY
+        real halfX
+        real halfY
+        
+        construct(real maxX, real maxY, real minX, real minY)
+            this.maxX = maxX
+            this.maxY = maxY
+            this.minX = minX
+            this.minY = minY
+            halfX = minX + (maxX - minX)/2
+            halfY = minY + (maxY - minY)/2
+            real x = (maxX - minX) - (maxX - minX)/2
+            real y = (maxY - minY) - (maxY - minY)/2
+            centerPoint = vec3( x, y, getTerrainZ( x, y ) )
+            print( "X " + R2S(x) + " Y " + R2S(y) + " Z " + R2S(centerPoint.z ) )
+            for int i = 0 to 12
+                FogModifierStart(CreateFogModifierRect( Player(i), FOG_OF_WAR_VISIBLE, worldRect, true, false ))
+        
+    public function initArena()
+        currentArena = new Arena(1152., 1152., -1152., -1152.)
+
+endpackage 

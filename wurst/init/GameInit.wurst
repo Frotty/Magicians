@@ -1,0 +1,27 @@
+package GameInit
+    import PlayerData
+    import Magician
+    import Obelisk
+    import Entity
+    import Arena
+    
+
+    
+    function initGame()
+
+        print("Starting Init")
+        initPlayers()
+        initObelisks()
+        initArena()
+        initMagicians()
+        
+        if init_EntityManagement()
+            print("Finished Init - Game started")
+        else
+            printError("gamestart malfunction")
+    init
+        trigger t = CreateTrigger()
+        TriggerRegisterTimerEvent( t, .2, false )
+        TriggerAddAction( t, function initGame )
+
+endpackage 

@@ -1,0 +1,62 @@
+package Projectile
+	import Entity
+	import Fx
+	import Terrain
+	import Physics
+	
+	public enum Movement
+		FREE
+		SPIN
+		HOMING
+	
+	public class Projectile extends DynamicEntity
+		Fx fx
+		
+		Movement movement = Movement.FREE
+		
+		vec3 spinCenter
+		real spinDistance = 0.
+		real spinSpeedGround = 0.
+		real groundAngle = 0.
+		real spinSpeedAir = 0.
+		real airAngle = 0.
+		
+		construct( real x, real y, real z, real radius, real angle, string sfxpath )
+			super(x, y, z, radius)	
+			
+			fx = new Fx(x, y, angle, sfxpath)
+			fx.setZ(z)
+			
+		override function update()
+			switch movement
+				case Movement.FREE
+					position += velocity
+				case Movement.SPIN
+					position = polarProjection3d(spinCenter, spinDistance, groundAngle, airAngle)
+					groundAngle += spinSpeedGround
+					airAngle += spinSpeedAir
+				case Movement.HOMING
+					skip
+				
+			fx.setX(position.x)
+			fx.setY(position.y)
+			fx.setZ(position.z - getTerrainZ(position.x, position.y) )
+			
+		function setSpinning( vec3 spinTarget, real dist, real groundSpinSpeed, real angleGround, real airSpinSpeed, real angleAir )
+			movement = Movement.SPIN
+			spinDistance = dist
+			spinCenter = spinTarget
+			spinSpeedGround = groundSpinSpeed
+			spinSpeedAir = airSpinSpeed
+			groundAngle = angleGround
+			airAngle = angleAir
+			
+		function setTarget( real x, real y, real speed, real angle )
+			let t = distanceBetweenCoords(position.x, position.y, x, y)/speed
+			let e = getTerrainZ(x,y)
+			
+			let startZVelocity = ((gravity.z * t) / 2 - position.z/t + e/t)
+			
+			this.setForce( Cos(angle) * speed, Sin(angle) * speed, startZVelocity )
+		
+endpackage

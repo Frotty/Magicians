@@ -1,0 +1,38 @@
+package EntityManagement
+	import Entity
+	import Lists
+	import Magician
+	
+	constant real DECAL_CLEANUP_PERIOD = 2.5
+	
+	real maxDeco = 25.
+	
+	Entity array decos
+	int size = 0
+	
+	public LinkedList<Magician> heroList = new LinkedList<Magician>()
+	
+	function updateEntities()
+		Entity e = Entity.first
+		while e != null
+			if e.active
+				e.update()
+			e = e.next
+			
+	public function addDeco(Entity e)
+		if size > maxDeco
+			print((decos[0] castTo int).toString())
+			destroy decos[0]
+			for int i = 1 to size-1
+				decos[i-1] = decos[i]
+			size--
+		decos[size]	= e
+		size++
+			
+		
+	public function init_EntityManagement() returns boolean
+		TimerStart(CreateTimer(), ANIMATION_PERIOD, true, function updateEntities)
+		return true
+
+		
+endpackage

@@ -1,0 +1,118 @@
+package Entity
+	import public Vectors
+	import public EntityManagement
+	import LinkedListModule
+	import Debug
+	import MapBounds
+	import Terrain
+	
+	public enum Side
+		LEFT
+		RIGHT
+		BOTTOM
+		TOP
+	
+	public class Entity
+		use LinkedListModule
+		
+		vec3 position
+		
+		real radius
+		player owner
+		real terrainZ
+		
+		boolean active = true
+		
+		construct( real x, real y, real z, real radius )
+			position = vec3(x,y,z)
+			this.radius = radius
+			entityCount++
+			currentEntityCount++
+			print("current Entities: " + currentEntityCount.toString() )
+			
+		function outOfBounds(Side side)
+			switch side
+				case Side.LEFT
+					position.x = minx + 1.
+				case Side.RIGHT
+					position.x = maxx - 1.
+				case Side.BOTTOM
+					position.y = miny + 1.
+				case Side.TOP
+					position.y = maxy - 1.
+					
+		function checkCollision( Entity e ) returns boolean
+			if (position.x-e.position.x).squared() + (position.y-e.position.y).squared() <= (radius+e.radius).squared()
+				return true
+			return false
+			
+		function onGround()
+			skip
+			
+		function inAir()
+			skip
+		
+		function update()
+			if position.x < minx
+				outOfBounds( Side.LEFT )
+			else if position.x > maxx
+				outOfBounds( Side.RIGHT )
+			else if position.y < miny
+				outOfBounds( Side.BOTTOM )
+			else if position.x > maxy
+				outOfBounds( Side.TOP )
+				
+			terrainZ = getTerrainZ( position.x, position.y )
+			
+			if position.z <= terrainZ + 1.
+				onGround()
+			else
+				inAir()
+			
+		ondestroy
+			currentEntityCount--
+	
+		
+	public class DynamicEntity extends Entity
+		vec3 velocity
+		
+		real factor = 1.
+		
+		construct( real x, real y, real z, real radius )
+			super(x,y,z, radius)
+			velocity = vec3(0,0,0)
+			dynamicEntityCount++
+			
+		function addForce(real x, real y, real z)
+			velocity += vec3(x,y,z)
+		
+		function setForce(real x, real y, real z)
+			velocity = vec3(x,y,z)
+			
+			
+	public class UnitEntity extends DynamicEntity
+		unit actor
+		
+		
+		construct( real x, real y, real z, real radius, unit u )
+			super(x,y,z,radius)
+			actor = u
+			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			owner = GetOwningPlayer(u)
+			actor.setUserData(this castTo int)
+			
+			unitEntityCount++
+			
+		override function onGround()
+			super.onGround()
+			position = vec3( actor.getX(), actor.getY(), terrainZ )
+			
+		override function inAir()
+			super.inAir()
+			position = vec3( actor.getX(), actor.getY(), position.z )
+				
+			
+		ondestroy
+			actor.remove()
+			
+endpackage

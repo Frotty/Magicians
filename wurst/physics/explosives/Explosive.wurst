@@ -1,0 +1,59 @@
+package Explosive
+	import Entity
+	import Fx 
+	
+	
+	module Explosive
+		Fx model
+	
+		real burstRadius
+		real power
+		
+		boolean activated = false
+		boolean timed = false
+		real timeout = 0.
+	
+	public class StaticExplosive extends Entity
+		use Explosive
+		
+		construct( real x, real y, real radius, real burstRadius, real power, boolean activated, boolean timed )
+			super( x, y, 0., radius )
+			
+			this.burstRadius = burstRadius
+			this.power = power
+			
+			this.activated = activated
+			this.timed = timed
+
+		override function update()
+			if timed and activated
+				timeout -= ANIMATION_PERIOD
+				if timeout <= 0.
+					explode()
+		
+		function explode()
+			skip
+			
+	public class DynamicExplosive extends DynamicEntity
+		use Explosive
+		
+		construct( real x, real y, real radius, real burstRadius, real power, boolean activated, boolean timed )
+			super( x, y, 0., radius )
+			
+			this.radius = radius
+			this.power = power
+			
+			this.activated = activated
+			this.timed = timed
+
+		override function update()
+			
+			if timed and activated
+				timeout -= ANIMATION_PERIOD
+				if timeout <= 0.
+					explode()
+		
+		function explode()
+			skip
+			
+endpackage 

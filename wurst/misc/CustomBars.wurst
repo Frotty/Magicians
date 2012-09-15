@@ -1,0 +1,35 @@
+package CustomBars
+	
+	public class CustomBar
+		string barText = "|cffffcc00[|r"
+		texttag tt
+		int value
+		int maxVal
+		
+		construct( real x, real y, int maxVal, int currentVal )
+			tt = CreateTextTag()
+			this.maxVal = maxVal
+			value = currentVal
+			
+			
+			boolean done = true
+			barText += "|cff99cc33"
+			for int i = 0 to maxVal
+				print( currentVal.toString() + " " + i.toString() + " " + maxVal.toString() )
+				if currentVal > i
+					print("> " + i.toString() )
+					barText += "|"
+				else if currentVal < i
+					print("< " + i.toString() )
+					if done
+						barText += "|" + "|r"
+						done = false
+					else
+						barText += "|"
+			barText += "|CFFFFCC00] |R"
+			
+			SetTextTagText(tt, barText, 0.05)
+			SetTextTagPos(tt, x, y, 30.)
+			
+			
+endpackage

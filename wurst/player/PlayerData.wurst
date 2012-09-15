@@ -1,0 +1,34 @@
+package PlayerData
+    import MultiboardClass
+    import LinkedListModule
+    import Magician
+    
+
+    public class PlayerData //just the player's (constant) stuff
+    	use LinkedListModule
+    	
+    	int id
+        int gameId
+        player p
+        
+        string name
+        string nick
+        
+        Magician mainUnit
+
+    
+        construct (player p)
+            this.p = p
+            id = GetPlayerId(p)
+            gameId = PlayerData.size - 1
+            name = GetPlayerName(p)
+
+            
+	public function initPlayers()
+		for i = 0 to 11
+			var p = Player(i)
+			if GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(p) == MAP_CONTROL_USER
+				new PlayerData( p )
+
+        
+endpackage 

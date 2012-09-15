@@ -1,0 +1,48 @@
+package Magician
+    import Entity
+    import EntityManagement
+    import Terrain
+    import TerrainUtils
+    import PlayerData    
+    import PrintingHelper
+    import ExtensionFunctions
+    import Arena
+    import Vectors
+    
+    constant int MAGICIAN_ID = 'magi'
+    constant real COLLISION_SIZE = 32.
+    
+    public class Magician extends UnitEntity
+        
+        real hp
+        real dmgRecieved
+        vec3 walkVelocity
+        
+        construct(real x, real y, real z, real facing, player p) 
+            super( x, y, z, COLLISION_SIZE, CreateUnit( p, MAGICIAN_ID , x, y, facing ) )
+            updatePosition()
+            
+        
+        function onCollision(Entity e)
+            
+            
+        function updatePosition()
+            //print("magi set")
+            SetUnitX( actor, position.x )
+            SetUnitY( actor, position.y )
+            SetUnitFlyHeight( actor, position.z - getTerrainZ(position.x, position.y ), .0 )
+
+            
+    public function initMagicians() //Do Shit
+        print( "initializing Magicians.." )
+        real distance = MAX_TILES*128. - 64.
+        PlayerData pd = PlayerData.first
+        int i = 0
+        while pd != null
+            real angle = 180 + (360/PlayerData.size) * i
+            pd.mainUnit = new Magician( polarProjectionXD( 0., distance, angle), polarProjectionYD( 0., distance, angle), 500., angle - 180, pd.p )
+            i++
+        print( "initializing Magicians..done!" )
+    
+
+endpackage 
