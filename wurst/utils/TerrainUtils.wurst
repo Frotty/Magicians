@@ -14,7 +14,7 @@ package TerrainUtils
         static real     maxWorldY
         
        
-    init
+    public function initTerrainUtils()
         TerrainUtils.minWorldX = GetRectMinX(TerrainUtils.worldRect)
         TerrainUtils.minWorldY = GetRectMinY(TerrainUtils.worldRect)
         TerrainUtils.maxWorldX = GetRectMaxX(TerrainUtils.worldRect)

@@ -4,12 +4,13 @@ package GameInit
     import Obelisk
     import Entity
     import Arena
-    
+    import TerrainUtils
 
     
     function initGame()
 
         print("Starting Init")
+        initTerrainUtils()
         initPlayers()
         initObelisks()
         initArena()

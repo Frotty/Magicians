@@ -10,8 +10,7 @@ package Obelisk
     public class Obelisk extends UnitEntity
 
         construct( real x, real y, real facing )
-            super( x, y, 0., COLLISION_SIZE, CreateUnit( owner, OBELISK_ID, x, y, facing ) )
-
+            super( x, y, 0., COLLISION_SIZE, CreateUnit( DUMMY_PLAYER, OBELISK_ID, x, y, facing ) )
 
         function onCollision(Entity e)
             //print("collided")
@@ -19,8 +18,9 @@ package Obelisk
     public function initObelisks()
         print( "initializing Obelisks.." )
         real distanceFromMid = ( MAX_TILES - 1.5 ) * TILE_SECTION_LENGTH
+        print("mid " + distanceFromMid.toString())
         real distanceFromPoint = TILE_SECTION_LENGTH
-        CreateUnit( Player(12), OBELISK_ID, 0, 0, 0 )
+        print("pt " + distanceFromPoint.toString())
         for int i = 0 to 3
             real angle = i * 90. + 45. 
             real x = polarProjectionXD( 0., distanceFromMid, angle )

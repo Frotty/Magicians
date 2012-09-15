@@ -96,6 +96,7 @@ package Entity
 		
 		construct( real x, real y, real z, real radius, unit u )
 			super(x,y,z,radius)
+			print(position.toString())
 			actor = u
 			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 			owner = GetOwningPlayer(u)
