@@ -11,7 +11,8 @@ package Obelisk
     public class Obelisk extends UnitEntity
 
         construct( vec2 pos, real facing )
-            super( pos.withZ(0), COLLISION_SIZE, CreateUnit( DUMMY_PLAYER, OBELISK_ID, pos.x, pos.y, facing ) )
+            super( pos.withZ(0), COLLISION_SIZE, CreateUnit( DUMMY_PLAYER, OBELISK_ID, pos.x, pos.y, facing ), DUMMY_PLAYER )
+            isStatic = true
             collisionEntities.add(this)
 
 

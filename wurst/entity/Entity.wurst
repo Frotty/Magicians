@@ -18,14 +18,17 @@ package Entity
 		vec3 position
 		
 		real radius
+		real mass = .1
 		player owner
 		real terrainZ
 		
+		boolean isStatic = false
 		boolean active = true
 		boolean done = false
 		
-		construct( vec3 pos, real radius )
+		construct( vec3 pos, real radius, player p )
 			position = pos
+			owner = p
 			this.radius = radius
 			entityCount++
 			currentEntityCount++
@@ -38,9 +41,9 @@ package Entity
 					position.x = currentArena.minX + 1.
 				case Side.RIGHT
 					position.x = currentArena.maxX - 1.
-				case Side.BOTTOM
-					position.y = currentArena.minY + 1.
 				case Side.TOP
+					position.y = currentArena.minY + 1.
+				case Side.BOTTOM
 					position.y = currentArena.maxY - 1.
 					
 					
@@ -55,14 +58,14 @@ package Entity
 
 		
 		function update()
-			if position.x < currentArena.minX
+			if position.x - radius < currentArena.minX
 				outOfBounds( Side.LEFT )
-			else if position.x > currentArena.maxX
+			else if position.x + radius > currentArena.maxX
 				outOfBounds( Side.RIGHT )
-			else if position.y < currentArena.minY
-				outOfBounds( Side.BOTTOM )
-			else if position.y > currentArena.maxY
+			else if position.y - radius < currentArena.minY
 				outOfBounds( Side.TOP )
+			else if position.y + radius > currentArena.maxY
+				outOfBounds( Side.BOTTOM )
 				
 			terrainZ = getTerrainZ( position.x, position.y )
 			
@@ -81,8 +84,8 @@ package Entity
 		
 		real factor = 1.
 
-		construct( vec3 pos, real radius )
-			super(pos, radius)
+		construct( vec3 pos, real radius, player p )
+			super(pos, radius, p)
 			velocity = vec3(0,0,0)
 			dynamicEntityCount++
 			
@@ -100,8 +103,8 @@ package Entity
 	public class UnitEntity extends DynamicEntity
 		unit actor
 		
-		construct( vec3 pos, real radius, unit u )
-			super(pos,radius)
+		construct( vec3 pos, real radius, unit u, player p )
+			super(pos,radius, p)
 			print(position.toString())
 			actor = u
 			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)

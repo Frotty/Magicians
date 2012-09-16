@@ -16,8 +16,8 @@ package PhysicalProjectile
 		real friction = 1.
 		
 		
-		construct( vec3 pos, real radius, real angle, string sfxpath )
-			super(pos, radius)	
+		construct( vec3 pos, real radius, real angle, string sfxpath, player p )
+			super(pos, radius, p)	
 			
 			fx = new Fx(pos, angle, sfxpath)
 

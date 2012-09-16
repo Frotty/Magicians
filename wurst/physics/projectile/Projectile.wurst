@@ -24,9 +24,9 @@ package Projectile
 		real spinSpeedAir = 0.
 		real airAngle = 0.
 		
-		construct(vec3 pos, real radius, real angle, string sfxpath )
-			super(pos, radius)	
-			
+		construct(vec3 pos, real radius, real angle, string sfxpath, player p )
+			super(pos, radius, p)	
+			groundAngle = angle*DEGTORAD
 			fx = new Fx(pos, angle, sfxpath)
 			
 		override function update()

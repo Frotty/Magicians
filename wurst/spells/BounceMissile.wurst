@@ -1,0 +1,102 @@
+package BounceMissile
+    import OnCast
+    import Entity
+    import CollisionProjectile
+    import Vectors
+    import Arena
+    import Fx
+    
+    constant real COLLISION_SIZE = 22.
+    constant string SFX_PATH = "war3mapImported\\BouncingMissile.mdx"
+    
+    public class BounceMissile extends CollisionProjectile
+        use OnPointCast
+        
+        
+        construct( vec3 pos, string fxpath, real angle, real speed, real radius, player p)
+            super( pos, radius, angle, fxpath, p )
+            setSpeed(speed)
+            setTimed( 4. )
+            print("added")
+            
+        function fixProjectile(real side)
+            fx.setXYAngle(groundAngle*RADTODEG)
+            Fx tempfx = new Fx( position.x, position.y, side, "Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl" )
+            destroy tempfx
+            
+        override function outOfBounds(Side side)
+            switch side
+            	case Side.LEFT
+	                print("unter minx")
+	                position.x = currentArena.minX + radius // Place ball against edge
+	                velocity.x = -velocity.x // Reverse direction and account for friction
+	                velocity.y = velocity.y
+	                groundAngle = 180*DEGTORAD - groundAngle
+	                fixProjectile(0.)
+            	case Side.RIGHT // Right Wall
+	                print("ueber maxX")
+	                position.x = currentArena.maxX - radius		// Place ball against edge
+	                velocity.x = -velocity.x // Reverse direction and account for friction
+	                velocity.y = velocity.y
+	                groundAngle = 180*DEGTORAD - groundAngle
+                	fixProjectile(180*DEGTORAD)
+            	case Side.TOP			// Top Wall
+	                print("unter miny")
+	                position.y = currentArena.minY + radius					// Place ball against edge
+	                velocity.x = velocity.x  // Reverse direction and account for friction
+	                velocity.y = -velocity.y
+	                groundAngle = 360*DEGTORAD - groundAngle
+	                fixProjectile(90*DEGTORAD)
+            	case Side.BOTTOM // Bottom Wall
+	                print("ueber maxY")
+	                position.y = currentArena.maxY - radius			// Place ball against edge
+	                velocity.x = velocity.x     // Reverse direction and account for friction
+	                velocity.y = -velocity.y 
+	                groundAngle = 360*DEGTORAD - groundAngle
+	                fixProjectile(270*DEGTORAD)
+            if position.z - radius <= 0.
+                //print("unter z=0")
+                position.z = radius + 1.
+                velocity.z = -velocity.z
+
+            
+        override function onGround()
+        override function inAir()
+        
+        override function onTimeout()
+        	done = true
+            
+
+        override function onCollision(Entity e)
+            if e.owner != owner
+                if e.isStatic
+                    print("not owner but static")
+                    vec2 pos1 = position.toVec2() 
+                    vec2 pos2 = e.position.toVec2()
+
+				    vec2 delta = pos1 - pos2			
+		            real d = delta.length()
+		            vec2 mtd = delta * (((radius + e.radius)-d)/d)
+		            
+		            position += ( mtd.toVec3() )
+		            velocity += mtd.toVec3()
+
+					groundAngle = vectorToAngle(velocity.toVec2())
+					fx.setXYAngle(groundAngle*RADTODEG)
+					print("4...")
+				else
+                	done = true
+            
+        override static function onPointCast(unit caster, int level, vec2 target)
+            print("casted")
+            let casterPos = caster.getPos()
+            let angle = casterPos.angleTo(target) * RADTODEG
+            for i = -3 to 3
+            	new BounceMissile( casterPos.withZ(45.), SFX_PATH , angle+10*i, 12., COLLISION_SIZE, GetOwningPlayer(caster) )
+
+            
+    init
+        BounceMissile.registerSpellEvent('Q002')
+        print("setup event Q2")
+        
+endpackage
