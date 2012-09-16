@@ -23,7 +23,7 @@ package Magician
             super( x, y, z, COLLISION_SIZE, CreateUnit( p, MAGICIAN_ID , x, y, facing ) )
             
         
-        function onCollision(Entity e)
+        override function onCollision(Entity e)
             
         override function inAir()
         	velocity += gravity

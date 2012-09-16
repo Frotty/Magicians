@@ -2,6 +2,7 @@ package Obelisk
     import Entity
     import TerrainUtils
     import Terrain
+    import Collisions
 
     
     constant int OBELISK_ID = 'lisk'
@@ -11,9 +12,10 @@ package Obelisk
 
         construct( real x, real y, real facing )
             super( x, y, 0., COLLISION_SIZE, CreateUnit( DUMMY_PLAYER, OBELISK_ID, x, y, facing ) )
+            collisionEntities.add(this)
 
-        function onCollision(Entity e)
-            //print("collided")
+        override function onCollision(Entity e)
+            print("collided")
             
     public function initObelisks()
         print( "initializing Obelisks.." )

@@ -38,8 +38,8 @@ package ArcaneMissile
 			
 		override function inAir()
 		
-        function onCollision(Entity e)
-            print("collided")
+        override function onCollision(Entity e)
+            onTimeout()
             
 		ondestroy
        		print("nooooo")

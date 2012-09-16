@@ -27,6 +27,8 @@ package PhysicalProjectile
 		override function onGround()
 			skip
 			
+		override function onCollision(Entity e)
+			
 		override function inAir()
 			velocity += gravity
 			

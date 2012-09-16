@@ -1,14 +1,20 @@
 package CollisionProjectile
-
+	import Collisions
 	import Projectile
+	import Entity
 	
 	public abstract class CollisionProjectile extends Projectile
 		
 		construct( real x, real y, real z, real radius, real angle, string sfxpath )
 			super( x, y, z, radius, angle, sfxpath )
+			collisionEntities.add(this)
+			
 			
 		override function update()
-			
 			super.update()
+			for Entity e in collisionEntities
+				if e.owner != owner and checkCollision(e)
+					onCollision(e)
+					e.onCollision(this)
 
 endpackage

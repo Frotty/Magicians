@@ -50,7 +50,7 @@ package Entity
 			return false
 			
 		abstract function onGround()
-			
+		abstract function onCollision(Entity e)
 		abstract function inAir()
 
 		
@@ -117,6 +117,9 @@ package Entity
 		override function inAir()
 			super.inAir()
 			position = vec3( actor.getX(), actor.getY(), position.z )
+			
+		override function onCollision(Entity e)
+		
 			
 		override function update()
 			super.update()
