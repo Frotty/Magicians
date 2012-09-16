@@ -2,6 +2,7 @@ package EntityManagement
 	import Entity
 	import Lists
 	import Magician
+	import Collisions
 	
 	constant real DECAL_CLEANUP_PERIOD = 2.5
 	
@@ -12,7 +13,18 @@ package EntityManagement
 	
 	public LinkedList<Magician> heroList = new LinkedList<Magician>()
 	
+	function checkCollisions()
+		for Entity e in collisionEntities
+			if e.done
+				collisionEntities.remove(e)
+			else
+				for Entity e2 in collisionEntities
+					if e.owner != e2.owner and e.checkCollision(e2)
+						e2.onCollision(e)
+						e.onCollision(e2)
+	
 	function updateEntities()
+		checkCollisions()
 		Entity e = Entity.first
 		while e != null
 			if e.active

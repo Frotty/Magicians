@@ -1,15 +1,17 @@
-package BounceMissile
+package RicochetMissile
     import OnCast
     import Entity
     import CollisionProjectile
     import Vectors
+    import Magician
     import Arena
     import Fx
+    import AbilityObjEditing
     
     constant real COLLISION_SIZE = 22.
     constant string SFX_PATH = "war3mapImported\\BouncingMissile.mdx"
     
-    public class BounceMissile extends CollisionProjectile
+    public class RicochetMissile extends CollisionProjectile
         use OnPointCast
         
         
@@ -85,18 +87,31 @@ package BounceMissile
 					fx.setXYAngle(groundAngle*RADTODEG)
 					print("4...")
 				else
+					print("collision")
                 	done = true
+                	if e instanceof Magician
+                        print("magic")
+                        Magician enemy = e castTo Magician
+                        let angle = angleBetweenCoordsR(position.x, position.y, enemy.position.x, enemy.position.y)
+                        enemy.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
+                        
+                	DisplayTextToPlayer(GetTriggerPlayer(), 0, 0, "deinText")
             
         override static function onPointCast(unit caster, int level, vec2 target)
             print("casted")
             let casterPos = caster.getPos()
             let angle = casterPos.angleTo(target) * RADTODEG
-            for i = -3 to 3
-            	new BounceMissile( casterPos.withZ(45.), SFX_PATH , angle+10*i, 12., COLLISION_SIZE, GetOwningPlayer(caster) )
+            new RicochetMissile( casterPos.withZ(45.), SFX_PATH , angle, 12., COLLISION_SIZE, GetOwningPlayer(caster) )
 
             
     init
-        BounceMissile.registerSpellEvent('Q002')
+        RicochetMissile.registerSpellEvent('Q002')
         print("setup event Q2")
+        
+	@compiletime function createRichoetObject()
+		AbilityDefinition ricochet = new AbilityDefinition("ric1", "asth" )
+		ricochet.setManaCost(0, 0)
+		ricochet.setLevels(0, 4)
+		ricochet.setName(0, "Missile")
         
 endpackage

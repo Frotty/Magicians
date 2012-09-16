@@ -27,7 +27,7 @@ package PlayerData
 	public function initPlayers()
 		for i = 0 to 11
 			var p = Player(i)
-			if GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(p) == MAP_CONTROL_USER
+			if GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING //and GetPlayerController(p) == MAP_CONTROL_USER
 				new PlayerData( p )
 
         

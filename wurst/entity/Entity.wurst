@@ -113,6 +113,10 @@ package Entity
 			
 			unitEntityCount++
 			
+		function setNewPos(vec3 pos)
+			position = pos
+			actor.setX(pos.x).setY(pos.y).setFlyHeight(pos.z, 0)
+			
 		override function onGround()
 			super.onGround()
 			position = vec3( actor.getX(), actor.getY(), terrainZ )
