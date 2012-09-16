@@ -24,11 +24,10 @@ package Projectile
 		real spinSpeedAir = 0.
 		real airAngle = 0.
 		
-		construct( real x, real y, real z, real radius, real angle, string sfxpath )
-			super(x, y, z, radius)	
+		construct(vec3 pos, real radius, real angle, string sfxpath )
+			super(pos, radius)	
 			
-			fx = new Fx(x, y, angle, sfxpath)
-			fx.setZ(z)
+			fx = new Fx(pos, angle, sfxpath)
 			
 		override function update()
 			super.update()

@@ -10,9 +10,10 @@ package Obelisk
     
     public class Obelisk extends UnitEntity
 
-        construct( real x, real y, real facing )
-            super( x, y, 0., COLLISION_SIZE, CreateUnit( DUMMY_PLAYER, OBELISK_ID, x, y, facing ) )
+        construct( vec2 pos, real facing )
+            super( pos.withZ(0), COLLISION_SIZE, CreateUnit( DUMMY_PLAYER, OBELISK_ID, pos.x, pos.y, facing ) )
             collisionEntities.add(this)
+
 
         override function onCollision(Entity e)
             print("collided")
@@ -25,10 +26,11 @@ package Obelisk
         print("pt " + distanceFromPoint.toString())
         for int i = 0 to 3
             real angle = i * 90. + 45. 
-            real x = polarProjectionXD( 0., distanceFromMid, angle )
-            real y = polarProjectionYD( 0., distanceFromMid, angle )
-            new Obelisk( polarProjectionXD( x, distanceFromPoint, angle + 90. ), polarProjectionYD( y, distanceFromPoint, angle + 90. ), 0. )
-            new Obelisk( polarProjectionXD( x, distanceFromPoint, angle - 90. ), polarProjectionYD( y, distanceFromPoint, angle - 90. ), 0. )
+            let point = vec2(0,0).polarOffset(angle*bj_DEGTORAD, distanceFromMid)
+            let p1 = point.polarOffset((angle + 90)*bj_DEGTORAD, distanceFromPoint)
+            new Obelisk( p1, 0. )
+            let p2 = point.polarOffset((angle - 90)*bj_DEGTORAD, distanceFromPoint)
+            new Obelisk( p2, 0. )
         print( "initializing Obelisks..done!" )
                 
     

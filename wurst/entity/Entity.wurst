@@ -24,8 +24,8 @@ package Entity
 		boolean active = true
 		boolean done = false
 		
-		construct( real x, real y, real z, real radius )
-			position = vec3(x,y,z)
+		construct( vec3 pos, real radius )
+			position = pos
 			this.radius = radius
 			entityCount++
 			currentEntityCount++
@@ -81,8 +81,8 @@ package Entity
 		
 		real factor = 1.
 
-		construct( real x, real y, real z, real radius )
-			super(x,y,z, radius)
+		construct( vec3 pos, real radius )
+			super(pos, radius)
 			velocity = vec3(0,0,0)
 			dynamicEntityCount++
 			
@@ -100,8 +100,8 @@ package Entity
 	public class UnitEntity extends DynamicEntity
 		unit actor
 		
-		construct( real x, real y, real z, real radius, unit u )
-			super(x,y,z,radius)
+		construct( vec3 pos, real radius, unit u )
+			super(pos,radius)
 			print(position.toString())
 			actor = u
 			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)

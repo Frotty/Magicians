@@ -1,12 +1,13 @@
 package CollisionProjectile
 	import Collisions
 	import Projectile
+	import Vectors
 	import Entity
 	
 	public abstract class CollisionProjectile extends Projectile
 		
-		construct( real x, real y, real z, real radius, real angle, string sfxpath )
-			super( x, y, z, radius, angle, sfxpath )
+		construct( vec3 pos, real radius, real angle, string sfxpath )
+			super( pos, radius, angle, sfxpath )
 			collisionEntities.add(this)
 			
 			

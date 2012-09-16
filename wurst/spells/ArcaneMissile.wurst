@@ -1,5 +1,5 @@
 package ArcaneMissile
-    import SpellModule
+    import OnCast
     import Entity
     import PrintingHelper
     import CollisionProjectile
@@ -12,11 +12,11 @@ package ArcaneMissile
     constant string SFX_PATH = "war3mapImported\\ArcaneMissile.mdx"
     
     public class ArcaneMissile extends CollisionProjectile
-        use SpellModule
+        use OnPointCast
         
         
-        construct( real x, real y, real z, string fxpath, real angle, real speed, real radius, player p )
-            super( x, y, z, radius, angle, fxpath )
+        construct( vec3 pos, string fxpath, real angle, real speed, real radius, player p )
+            super( pos, radius, angle, fxpath )
             print("arcane missile")
             groundAngle = angle*DEGTORAD
             owner = p
@@ -44,17 +44,14 @@ package ArcaneMissile
 		ondestroy
        		print("nooooo")
         
-        override static function onCast()
-            print("casted")
-            unit u = GetSpellAbilityUnit()
-            real angle = angleBetweenCoordsD( GetUnitX(u), GetUnitY(u), GetSpellTargetX(), GetSpellTargetY() )
-            print ( R2S(angle) + "  " + R2S(angle*RADTODEG) )
-            ArcaneMissile n = new ArcaneMissile( GetUnitX(u), GetUnitY(u), 45., SFX_PATH , angle, 12., COLLISION_SIZE, GetOwningPlayer(u) )
-            print("created")
+        override static function onPointCast(unit caster, int level, vec2 target)
+        	let casterPos = caster.getPos()
+        	let angle = casterPos.angleTo(target) * bj_RADTODEG
+            ArcaneMissile n = new ArcaneMissile( casterPos.withZ(45), SFX_PATH , angle, 12., COLLISION_SIZE, caster.getOwner() )
             n.fx.setZAngle(90.)
             
     init
-        ArcaneMissile.setUpSpellEvent('Q001')
+        ArcaneMissile.registerSpellEvent('Q001')
         print("setup event Q")
         
 endpackage
