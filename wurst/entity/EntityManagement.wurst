@@ -27,11 +27,10 @@ package EntityManagement
 		checkCollisions()
 		Entity e = Entity.first
 		while e != null
-			if e.active
-				if e.done
-					destroy e
-				else
-					e.update()
+			if e.done
+				destroy e
+			else if e.active
+				e.update()
 			e = e.next
 			
 	public function addDeco(Entity e)

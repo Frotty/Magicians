@@ -20,6 +20,7 @@ package RicochetMissile
             setSpeed(speed)
             setTimed( 4. )
             print("added")
+
             
         function fixProjectile(real side)
             fx.setXYAngle(groundAngle*RADTODEG)
@@ -70,32 +71,30 @@ package RicochetMissile
             
 
         override function onCollision(Entity e)
-            if e.owner != owner
-                if e.isStatic
-                    print("not owner but static")
-                    vec2 pos1 = position.toVec2() 
-                    vec2 pos2 = e.position.toVec2()
+            if e.isStatic
+                print("not owner but static")
+                vec2 pos1 = position.toVec2() 
+                vec2 pos2 = e.position.toVec2()
 
-				    vec2 delta = pos1 - pos2			
-		            real d = delta.length()
-		            vec2 mtd = delta * (((radius + e.radius)-d)/d)
-		            
-		            position += ( mtd.toVec3() )
-		            velocity += mtd.toVec3()
+			    vec2 delta = pos1 - pos2			
+	            real d = delta.length()
+	            vec2 mtd = delta * (((radius + e.radius)-d)/d)
+	            
+	            position += ( mtd.toVec3() )
+	            velocity += mtd.toVec3()
 
-					groundAngle = vectorToAngle(velocity.toVec2())
-					fx.setXYAngle(groundAngle*RADTODEG)
-					print("4...")
-				else
-					print("collision")
-                	done = true
-                	if e instanceof Magician
-                        print("magic")
-                        Magician enemy = e castTo Magician
-                        let angle = angleBetweenCoordsR(position.x, position.y, enemy.position.x, enemy.position.y)
-                        enemy.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
-                        
-                	DisplayTextToPlayer(GetTriggerPlayer(), 0, 0, "deinText")
+				groundAngle = vectorToAngle(velocity.toVec2())
+				fx.setXYAngle(groundAngle*RADTODEG)
+				print("4...")
+			else
+				print("collision")
+            	done = true
+            	if e instanceof Magician
+                    print("magic")
+                    Magician enemy = e castTo Magician
+                    let angle = angleBetweenCoordsR(position.x, position.y, enemy.position.x, enemy.position.y)
+                    enemy.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
+
             
         override static function onPointCast(unit caster, int level, vec2 target)
             print("casted")
