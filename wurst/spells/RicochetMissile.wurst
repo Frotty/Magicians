@@ -7,6 +7,7 @@ package RicochetMissile
     import Arena
     import Fx
     import AbilityObjEditing
+    import Physics
     
     constant real COLLISION_SIZE = 22.
     constant string SFX_PATH = "war3mapImported\\BouncingMissile.mdx"
@@ -73,15 +74,9 @@ package RicochetMissile
             if e.owner != owner
                 if e.isStatic
                     print("not owner but static")
-                    vec2 pos1 = position.toVec2() 
-                    vec2 pos2 = e.position.toVec2()
-
-				    vec2 delta = pos1 - pos2			
-		            real d = delta.length()
-		            vec2 mtd = delta * (((radius + e.radius)-d)/d)
-		            
-		            position += ( mtd.toVec3() )
-		            velocity += mtd.toVec3()
+                    
+                    velocity += collisionWithStaticVelocityChange(position.toVec2(), velocity.toVec2(), e.position.toVec2()).toVec3()
+                    
 
 					groundAngle = vectorToAngle(velocity.toVec2())
 					fx.setXYAngle(groundAngle*RADTODEG)
