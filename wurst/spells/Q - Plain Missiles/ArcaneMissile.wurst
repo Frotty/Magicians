@@ -2,7 +2,7 @@ package ArcaneMissile
     import OnCast
     import Entity
     import PrintingHelper
-    import CollisionProjectile
+    import Projectile
     import Arena
     import Vectors
     import Collisions
@@ -13,7 +13,7 @@ package ArcaneMissile
     constant real EXPLOSION_AOE = 180.
     constant string SFX_PATH = "war3mapImported\\ArcaneMissile.mdx"
     
-    public class ArcaneMissile extends CollisionProjectile
+    public class ArcaneMissile extends Projectile
         use OnPointCast
         
         
@@ -23,6 +23,7 @@ package ArcaneMissile
             setTimed(0.4)
             fx.setScale(.70)
             setSpeed(speed)
+            collisionEntities.add(this)
             
         override function outOfBounds(Side side)
 	        if active
@@ -62,6 +63,7 @@ package ArcaneMissile
 					Magician ma = e castTo Magician
 					ma.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
 			m.done = true
+			t.release()
             
     init
         ArcaneMissile.registerSpellEvent('Q001')

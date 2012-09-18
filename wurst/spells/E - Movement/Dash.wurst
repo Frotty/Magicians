@@ -1,0 +1,46 @@
+package Dash
+	import OnCast
+	import Magician
+	import TimerUtils
+	
+	string SFX_PATH = "Abilities\\Spells\\Other\\Tornado\\Tornado_Target.mdl"
+	
+	class EffectBunch
+		effect origin
+		effect handleft
+		effect handright
+		effect chest
+		
+		construct( string fxpath, unit u )
+			origin  = u.addEffect(SFX_PATH, "origin")
+			handleft = u.addEffect(SFX_PATH, "hand left")
+			handright = u.addEffect(SFX_PATH, "hand right")
+			chest = u.addEffect(SFX_PATH, "chest")
+			
+		ondestroy
+			origin.destr()
+			handleft.destr()
+			handright.destr()
+			chest.destr()
+			
+			
+	function removeEffects()
+		timer t = GetExpiredTimer()
+		destroy t.getData() castTo EffectBunch
+		t.release()
+	
+	public class Dash
+		use OnPointCast
+		
+		override static function onPointCast(unit caster, int level, vec2 target)
+			Magician m = caster.getUserData() castTo Magician
+			let angle = m.position.toVec2().angleTo(target)
+			m.addForce(Cos(angle)*10, Sin(angle)*10, 10.)
+			getTimer()
+			.setData(new EffectBunch(SFX_PATH, caster) castTo int)
+			.start(2., function removeEffects)
+			
+	init
+        Dash.registerSpellEvent('E000')
+        print("setup event E")
+endpackage

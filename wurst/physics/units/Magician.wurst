@@ -57,7 +57,6 @@ package Magician
         	if velocity.z < -1
                 velocity = vec3(velocity.x, velocity.y, -velocity.z/2)
         	velocity *= 0.985
-        	velocity = velocity.trim(1.)
         	
         override function outOfBounds(Side side)
             switch side
