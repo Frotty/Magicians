@@ -75,7 +75,8 @@ package RicochetMissile
                 if e.isStatic
                     print("not owner but static")
                     
-                    velocity += collisionWithStaticVelocityChange(position.toVec2(), velocity.toVec2(), e.position.toVec2()).toVec3()
+                    //velocity += collisionWithStaticVelocityChange(position.toVec2(), velocity.toVec2(), e.position.toVec2()).toVec3()
+                    collideWithStatic(e)
                     
 
 					groundAngle = vectorToAngle(velocity.toVec2())

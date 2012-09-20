@@ -15,4 +15,27 @@ package Physics
         	return deltaNorm * speedTowardsStatic * -2.
         else
         	return vec2(0,0)	
+        	
+	public tuple velocityChanges(vec2 vel1, vec2 vel2)
+	        	
+	public function calculateCollision(vec2 pos1, vec2 vel1, vec2 pos2, vec2 vel2) returns velocityChanges
+		vec2 deltaNorm = (pos2 - pos1).norm()			
+        real speed1central = vel1.dot(deltaNorm)
+        real speed2central = vel1.dot(deltaNorm)
+        
+        // split the velocities in a part linear to the delta vector (central) and an orthogonal part 
+        vec2 vel1central = deltaNorm*speed1central
+        vec2 vel1orthogonal = vel1 - vel1central
+        
+        vec2 vel2central = deltaNorm*speed2central
+        vec2 vel2orthogonal = vel2 - vel2central
+        
+        // the central velocities are exchanged, the orthogonal velocities remain unchanged
+        // this is similar to the collision with a wall where the velocity which is parallel to 
+        // the wall is unchanged, whereas the other part of the velocity is inversed
+        
+        return  velocityChanges(vel2central - vel1central, vel1central - vel2central)
+        
+	  
+	      
 endpackage

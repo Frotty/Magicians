@@ -98,7 +98,43 @@ package Entity
 		override function update()
 			super.update()
 			position += velocity
+		
+		// calculates a collision with a static entity and changes the velocity accordingly	
+		function collideWithStatic(Entity staticEntity)
+			vec2 deltaNorm = (staticEntity.position.toVec2() - position.toVec2()).norm()			
+	        let speedTowardsStatic = velocity.toVec2().dot(deltaNorm)
+	        if speedTowardsStatic > 0
+	        	velocity += (deltaNorm * speedTowardsStatic * -2.).toVec3()
+	        	
+		// calculates a collision with an other dynamic entity and updates the velocity 
+		// of _both_ entities accordingly	        	
+		function collideWithDynamicEntity(DynamicEntity other)
+			let pos1 = position.toVec2()
+			let pos2 = other.position.toVec2()
+			let vel1 = velocity.toVec2()
+			let vel2 = other.velocity.toVec2()
 			
+			let deltaNorm = (pos2 - pos1).norm()			
+	        real speed1central = vel1.dot(deltaNorm)
+	        real speed2central = vel2.dot(deltaNorm)
+	        
+	        print("speed1central = " + speed1central.toString())
+	        print("speed2central = " + speed2central.toString())
+	        if speed1central >= 0 and speed2central <= 0
+		        // split the velocities in a part linear to the delta vector (central) and an orthogonal part 
+		        let vel1central = deltaNorm*speed1central
+		        let vel1orthogonal = vel1 - vel1central
+		        
+		        let vel2central = deltaNorm*speed2central
+		        let vel2orthogonal = vel2 - vel2central
+		        
+		        // the central velocities are exchanged, the orthogonal velocities remain unchanged
+		        // this is similar to the collision with a wall where the velocity which is parallel to 
+		        // the wall is unchanged, whereas the other part of the velocity is inversed
+		        velocity += (vel2central - vel1central).toVec3()
+		        other.velocity += (vel1central - vel2central).toVec3()
+			
+		
 			
 	public class UnitEntity extends DynamicEntity
 		unit actor

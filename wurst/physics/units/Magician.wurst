@@ -24,29 +24,14 @@ package Magician
             super(pos, COLLISION_SIZE, CreateUnit( p, MAGICIAN_ID , pos.x, pos.y, facing ), p )
             collisionEntities.add(this)
             
-        
         override function onCollision(Entity e)
             if e.owner != owner
                 if e.isStatic
-                    print("magi on obelisk")
-                    vec2 pos1 = position.toVec2() 
-                    vec2 pos2 = e.position.toVec2()
-
-				    vec2 delta = pos1 - pos2
-				    print("delta: " + delta.toString())		
-		            real d = delta.lengthSquared()
-		            print("length: " +delta.length().toString())
-		            vec2 mtd = delta * (((radius + e.radius)-d)/d)
-		            
-		            setNewPos( position + (mtd.toVec3()*1.001) )
-		            print(velocity.lengthSquared().toString())
-		            if velocity.lengthSquared() > 1.
-						print("vel")
-		            	velocity += mtd.toVec3()
-
-					print("4...")
-				else
-					print("not implemented")
+                    velocity += collisionWithStaticVelocityChange(position.toVec2(), velocity.toVec2(), e.position.toVec2()).toVec3()
+                    collideWithStatic(e)
+				else if e instanceof DynamicEntity
+					collideWithDynamicEntity(e castTo DynamicEntity)
+					
             
         override function inAir()
         	velocity += gravity
