@@ -1,18 +1,19 @@
 package RicochetMissile
     import OnCast
     import Entity
-    import CollisionProjectile
+    import Projectile
     import Vectors
     import Magician
     import Arena
     import Fx
     import AbilityObjEditing
     import Physics
+    import Collisions
     
     constant real COLLISION_SIZE = 22.
     constant string SFX_PATH = "war3mapImported\\BouncingMissile.mdx"
     
-    public class RicochetMissile extends CollisionProjectile
+    public class RicochetMissile extends Projectile
         use OnPointCast
         
         
@@ -20,7 +21,9 @@ package RicochetMissile
             super( pos, radius, angle, fxpath, p )
             setSpeed(speed)
             setTimed( 4. )
+            collisionEntities.add(this)
             print("added")
+
             
         function fixProjectile(real side)
             fx.setXYAngle(groundAngle*RADTODEG)
@@ -74,24 +77,20 @@ package RicochetMissile
             if e.owner != owner
                 if e.isStatic
                     print("not owner but static")
-                    
-                    //velocity += collisionWithStaticVelocityChange(position.toVec2(), velocity.toVec2(), e.position.toVec2()).toVec3()
                     collideWithStatic(e)
-                    
-
 					groundAngle = vectorToAngle(velocity.toVec2())
 					fx.setXYAngle(groundAngle*RADTODEG)
 					print("4...")
 				else
 					print("collision")
-                	done = true
-                	if e instanceof Magician
-                        print("magic")
-                        Magician enemy = e castTo Magician
-                        let angle = angleBetweenCoordsR(position.x, position.y, enemy.position.x, enemy.position.y)
-                        enemy.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
-                        
-                	DisplayTextToPlayer(GetTriggerPlayer(), 0, 0, "deinText")
+	            	done = true
+	            	if e instanceof Magician
+	                    print("magic")
+	                    Magician enemy = e castTo Magician
+	                    let angle = angleBetweenCoordsR(position.x, position.y, enemy.position.x, enemy.position.y)
+	                    enemy.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
+
+
             
         override static function onPointCast(unit caster, int level, vec2 target)
             print("casted")

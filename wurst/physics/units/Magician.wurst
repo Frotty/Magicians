@@ -27,7 +27,6 @@ package Magician
         override function onCollision(Entity e)
             if e.owner != owner
                 if e.isStatic
-                    velocity += collisionWithStaticVelocityChange(position.toVec2(), velocity.toVec2(), e.position.toVec2()).toVec3()
                     collideWithStatic(e)
 				else if e instanceof DynamicEntity
 					collideWithDynamicEntity(e castTo DynamicEntity)
@@ -42,7 +41,6 @@ package Magician
         	if velocity.z < -1
                 velocity = vec3(velocity.x, velocity.y, -velocity.z/2)
         	velocity *= 0.985
-        	velocity = velocity.trim(1.)
         	
         override function outOfBounds(Side side)
             switch side
