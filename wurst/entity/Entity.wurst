@@ -114,13 +114,17 @@ package Entity
 			let vel1 = velocity.toVec2()
 			let vel2 = other.velocity.toVec2()
 			
-			let deltaNorm = (pos2 - pos1).norm()			
+			let delta = (pos2 - pos1)
+			let deltaLen = delta.length()
+			let deltaNorm = delta * (1/deltaLen)			
 	        real speed1central = vel1.dot(deltaNorm)
 	        real speed2central = vel2.dot(deltaNorm)
+
+	        let futurePos1 = pos1 + vel1*0.01
+	        let futurePos2 = pos2 + vel2*0.01
+	        let futureDelta = (futurePos2 - futurePos1)
 	        
-	        print("speed1central = " + speed1central.toString())
-	        print("speed2central = " + speed2central.toString())
-	        if speed1central >= 0 and speed2central <= 0
+	        if futureDelta.length() < deltaLen  
 		        // split the velocities in a part linear to the delta vector (central) and an orthogonal part 
 		        let vel1central = deltaNorm*speed1central
 		        let vel1orthogonal = vel1 - vel1central
