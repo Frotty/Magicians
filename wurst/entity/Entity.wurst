@@ -6,6 +6,9 @@ package Entity
 	import Arena
 	import Terrain
 	
+	// bound factor for unit-unit collision
+	public constant BOUNCE_FACTOR = 0.6
+	
 	public enum Side
 		LEFT
 		RIGHT
@@ -98,7 +101,68 @@ package Entity
 		override function update()
 			super.update()
 			position += velocity
+		
+		// calculates a collision with a static entity and changes the velocity accordingly	
+		function collideWithStatic(Entity staticEntity)
+			vec2 deltaNorm = (staticEntity.position.toVec2() - position.toVec2()).norm()			
+	        let speedTowardsStatic = velocity.toVec2().dot(deltaNorm)
+	        if speedTowardsStatic > 0
+	        	velocity += (deltaNorm * speedTowardsStatic * -2.).toVec3()
+	        	
+		// calculates a collision with an other dynamic entity and updates the velocity 
+		// of _both_ entities accordingly	        	
+		// bounceFactor should be greater than 0 and less or equal to 1
+		function collideWithDynamicEntity(DynamicEntity other, real bounceFactor)
+			let pos1 = position.toVec2()
+			let pos2 = other.position.toVec2()
+			let vel1 = velocity.toVec2()
+			let vel2 = other.velocity.toVec2()
 			
+			let delta = (pos2 - pos1)
+			let deltaLen = delta.length()
+			let deltaNorm = delta * (1/deltaLen)			
+	        real speed1central = vel1.dot(deltaNorm)
+	        real speed2central = vel2.dot(deltaNorm)
+
+	        let futurePos1 = pos1 + vel1*0.01
+	        let futurePos2 = pos2 + vel2*0.01
+	        let futureDelta = (futurePos2 - futurePos1)
+	        
+	        if futureDelta.length() < deltaLen  
+		        // split the velocities in a part linear to the delta vector (central) and an orthogonal part 
+		        let vel1central = deltaNorm*speed1central
+		        let vel1orthogonal = vel1 - vel1central
+		        
+		        let vel2central = deltaNorm*speed2central
+		        let vel2orthogonal = vel2 - vel2central
+		        
+		        // the central velocities are exchanged, the orthogonal velocities remain unchanged
+		        // this is similar to the collision with a wall where the velocity which is parallel to 
+		        // the wall is unchanged, whereas the other part of the velocity is inversed
+		        velocity += (vel2central - vel1central).toVec3() * bounceFactor
+		        other.velocity += (vel1central - vel2central).toVec3() * bounceFactor
+		
+		// bounce off the specified side		        
+		function boundsBounce(Side side)
+            switch side
+            	case Side.LEFT // Left Wall
+	                position.x = currentArena.minX + radius // Place ball against edge
+	                if velocity.x < 0
+	                	velocity.x = -velocity.x
+            	case Side.RIGHT // Right Wall
+	                position.x = currentArena.maxX - radius		// Place ball against edge
+	                if velocity.x > 0
+	                	velocity.x = -velocity.x // Reverse direction and account for friction
+            	case Side.TOP			// Top Wall
+	                position.y = currentArena.minY + radius					// Place ball against edge
+	                if velocity.y < 0
+		                velocity.y = -velocity.y
+            	case Side.BOTTOM // Bottom Wall
+	                position.y = currentArena.maxY - radius			// Place ball against edge
+	                if velocity.y > 0
+	                	velocity.y = -velocity.y 
+			
+		
 			
 	public class UnitEntity extends DynamicEntity
 		unit actor

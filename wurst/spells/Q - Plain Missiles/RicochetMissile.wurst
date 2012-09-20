@@ -74,23 +74,21 @@ package RicochetMissile
             
 
         override function onCollision(Entity e)
-            if e.isStatic
-                print("not owner but static")
-                velocity += collisionWithStaticVelocityChange(position.toVec2(), velocity.toVec2(), e.position.toVec2()).toVec3()
-
-				groundAngle = vectorToAngle(velocity.toVec2())
-				fx.setXYAngle(groundAngle*RADTODEG)
-				print("4...")
-			else
-				print("collision")
-            	done = true
-            	if e instanceof Magician
-                    print("magic")
-                    Magician enemy = e castTo Magician
-                    let angle = angleBetweenCoordsR(position.x, position.y, enemy.position.x, enemy.position.y)
-                    enemy.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
-
-                    
+            if e.owner != owner
+                if e.isStatic
+                    print("not owner but static")
+                    collideWithStatic(e)
+					groundAngle = vectorToAngle(velocity.toVec2())
+					fx.setXYAngle(groundAngle*RADTODEG)
+					print("4...")
+				else
+					print("collision")
+	            	done = true
+	            	if e instanceof Magician
+	                    print("magic")
+	                    Magician enemy = e castTo Magician
+	                    let angle = angleBetweenCoordsR(position.x, position.y, enemy.position.x, enemy.position.y)
+	                    enemy.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
 
 
             

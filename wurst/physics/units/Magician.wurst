@@ -15,6 +15,7 @@ package Magician
     constant real COLLISION_SIZE = 32.
     constant int VOID_ID = 1097101927
     
+    
     public class Magician extends UnitEntity
         
         real hp
@@ -25,7 +26,6 @@ package Magician
             super(pos, COLLISION_SIZE, CreateUnit( p, MAGICIAN_ID , pos.x, pos.y, facing ), p )
             collisionEntities.add(this)
             
-        
         override function onCollision(Entity e)
             if e.owner != owner
                 vec2 pos1 = position.toVec2() 
@@ -34,26 +34,11 @@ package Magician
                 real d = delta.length()
                 vec2 mtd = delta * (((radius + e.radius)-d)/d)
                 if e.isStatic
-                    print("magi on obelisk")
-                    
-
-				    
-				    print("delta: " + delta.toString())		
-		            
-		            print("length: " +delta.length().toString())
-		            
-		            
-		            setNewPos( position + (mtd.toVec3()*1.001) )
-		            print(velocity.lengthSquared().toString())
-		            if velocity.lengthSquared() > 1.
-						print("vel")
-		            	velocity += mtd.toVec3()
-
-					print("4...")
-				else
-					if e instanceof Magician
-						print("meh")
-					            
+                    collideWithStatic(e)
+				else if e instanceof DynamicEntity
+					collideWithDynamicEntity(e castTo DynamicEntity, BOUNCE_FACTOR)
+					
+            
         override function inAir()
         	velocity += gravity
         	super.inAir()
@@ -71,27 +56,7 @@ package Magician
         	velocity *= 0.985
         	
         override function outOfBounds(Side side)
-            switch side
-            	case Side.LEFT
-	                print("unter minx")
-	                position.x = currentArena.minX + radius // Place ball against edge
-	                velocity.x = -velocity.x // Reverse direction and account for friction
-	                velocity.y = velocity.y
-            	case Side.RIGHT // Right Wall
-	                print("ueber maxX")
-	                position.x = currentArena.maxX - radius		// Place ball against edge
-	                velocity.x = -velocity.x // Reverse direction and account for friction
-	                velocity.y = velocity.y
-            	case Side.TOP			// Top Wall
-	                print("unter miny")
-	                position.y = currentArena.minY + radius					// Place ball against edge
-	                velocity.x = velocity.x  // Reverse direction and account for friction
-	                velocity.y = -velocity.y
-            	case Side.BOTTOM // Bottom Wall
-	                print("ueber maxY")
-	                position.y = currentArena.maxY - radius			// Place ball against edge
-	                velocity.x = velocity.x     // Reverse direction and account for friction
-	                velocity.y = -velocity.y 
+        	boundsBounce(side)
 
 
             

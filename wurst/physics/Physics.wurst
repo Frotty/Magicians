@@ -6,13 +6,4 @@ package Physics
 	public real terrainHeight = 0.
 	
 		
-	// collision of moving entity position+velocity with staticPosition
-	// returns the resulting change in velocity of the moving entity		
-	public function collisionWithStaticVelocityChange(vec2 position, vec2 velocity, vec2 staticPosition) returns vec2
-	    vec2 deltaNorm = (staticPosition - position).norm()			
-        let speedTowardsStatic = velocity.dot(deltaNorm)
-        if speedTowardsStatic > 0
-        	return deltaNorm * speedTowardsStatic * -2.
-        else
-        	return vec2(0,0)	
 endpackage
