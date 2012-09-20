@@ -19,7 +19,7 @@ package EntityManagement
 				collisionEntities.remove(e)
 			else
 				for Entity e2 in collisionEntities
-					if e.owner != e2.owner and e.checkCollision(e2)
+					if e.active and e2.active and e.owner != e2.owner and e.checkCollision(e2)
 						e2.onCollision(e)
 						e.onCollision(e2)
 	

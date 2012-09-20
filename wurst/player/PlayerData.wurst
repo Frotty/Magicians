@@ -3,6 +3,7 @@ package PlayerData
     import LinkedListModule
     import Magician
     
+    force array teams
 
     public class PlayerData //just the player's (constant) stuff
     	use LinkedListModule

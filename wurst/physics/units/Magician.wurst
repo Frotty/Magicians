@@ -13,6 +13,7 @@ package Magician
     
     constant int MAGICIAN_ID = 'magi'
     constant real COLLISION_SIZE = 32.
+    constant int VOID_ID = 1097101927
     
     public class Magician extends UnitEntity
         
@@ -27,16 +28,20 @@ package Magician
         
         override function onCollision(Entity e)
             if e.owner != owner
+                vec2 pos1 = position.toVec2() 
+                vec2 pos2 = e.position.toVec2()
+                vec2 delta = pos1 - pos2
+                real d = delta.length()
+                vec2 mtd = delta * (((radius + e.radius)-d)/d)
                 if e.isStatic
                     print("magi on obelisk")
-                    vec2 pos1 = position.toVec2() 
-                    vec2 pos2 = e.position.toVec2()
+                    
 
-				    vec2 delta = pos1 - pos2
+				    
 				    print("delta: " + delta.toString())		
-		            real d = delta.lengthSquared()
+		            
 		            print("length: " +delta.length().toString())
-		            vec2 mtd = delta * (((radius + e.radius)-d)/d)
+		            
 		            
 		            setNewPos( position + (mtd.toVec3()*1.001) )
 		            print(velocity.lengthSquared().toString())
@@ -46,14 +51,21 @@ package Magician
 
 					print("4...")
 				else
-					print("not implemented")
-            
+					if e instanceof Magician
+						print("meh")
+					            
         override function inAir()
         	velocity += gravity
         	super.inAir()
         	
         override function onGround()
         	super.onGround()
+
+        	if GetTerrainType(position.x, position.y) == VOID_ID
+                actor.setHP( actor.getHP() - 10.2 )
+                if actor.getHP() <= .405
+                    active = false
+                    AddSpecialEffect("Abilities\\Spells\\Other\\HowlOfTerror\\HowlCaster.mdl", position.x, position.y)
         	if velocity.z < -1
                 velocity = vec3(velocity.x, velocity.y, -velocity.z/2)
         	velocity *= 0.985
@@ -80,8 +92,7 @@ package Magician
 	                position.y = currentArena.maxY - radius			// Place ball against edge
 	                velocity.x = velocity.x     // Reverse direction and account for friction
 	                velocity.y = -velocity.y 
-            
-            
+
 
             
     public function initMagicians() //Do Shit

@@ -5,8 +5,10 @@ package GameInit
     import Entity
     import Arena
     import TerrainUtils
-
+	import RGBA
+	import CustomBar
     
+        	
     function initGame()
 
         print("Starting Init")
@@ -20,6 +22,8 @@ package GameInit
             print("Finished Init - Game started")
         else
             printError("gamestart malfunction")
+            
+        new CustomBar(vec3(0,0,40),"|", 120, 5)
     init
         trigger t = CreateTrigger()
         TriggerRegisterTimerEvent( t, .2, false )
