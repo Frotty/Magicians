@@ -88,7 +88,7 @@ package RicochetMissile
 	                    print("magic")
 	                    Magician enemy = e castTo Magician
 	                    let angle = angleBetweenCoordsR(position.x, position.y, enemy.position.x, enemy.position.y)
-	                    enemy.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
+	                    enemy.addForce(Cos(angle)*640, Sin(angle)*640, 0.)
 
 
             
@@ -96,7 +96,7 @@ package RicochetMissile
             print("casted")
             let casterPos = caster.getPos()
             let angle = casterPos.angleTo(target) * RADTODEG
-            new RicochetMissile( casterPos.withZ(45.), SFX_PATH , angle, 12., COLLISION_SIZE, GetOwningPlayer(caster) )
+            new RicochetMissile( casterPos.withZ(45.), SFX_PATH , angle, 768., COLLISION_SIZE, GetOwningPlayer(caster) )
 
             
     init

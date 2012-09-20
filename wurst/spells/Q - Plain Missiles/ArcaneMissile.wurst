@@ -50,7 +50,7 @@ package ArcaneMissile
         override static function onPointCast(unit caster, int level, vec2 target)
         	let casterPos = caster.getPos()
         	let angle = casterPos.angleTo(target) * RADTODEG
-            ArcaneMissile n = new ArcaneMissile( casterPos.withZ(45), SFX_PATH , angle, 12., COLLISION_SIZE, caster.getOwner() )
+            ArcaneMissile n = new ArcaneMissile( casterPos.withZ(45), SFX_PATH , angle, 768., COLLISION_SIZE, caster.getOwner() )
             n.fx.setZAngle(90.)
             
             
@@ -61,7 +61,7 @@ package ArcaneMissile
 				if e.owner != m.owner and m.position.inCircle( e.position, EXPLOSION_AOE ) and e instanceof Magician
 					var angle = angleBetweenCoordsR( m.position.x, m.position.y,e.position.x, e.position.y)
 					Magician ma = e castTo Magician
-					ma.addForce(Cos(angle)*10, Sin(angle)*10, 0.)
+					ma.addForce(Cos(angle)*640, Sin(angle)*640, 0.)
 			m.done = true
 			t.release()
             

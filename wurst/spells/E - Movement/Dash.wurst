@@ -37,7 +37,7 @@ package Dash
 			Magician m = caster.getUserData() castTo Magician
 			let angle = m.position.toVec2().angleTo(target)
 			AddSpecialEffect("Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl", m.position.x, m.position.y ).destr()
-			m.addForce(Cos(angle)*10, Sin(angle)*10, 10.)
+			m.addForce(Cos(angle)*640, Sin(angle)*640, 640.)
 			getTimer()
 			.setData(new EffectBunch(SFX_PATH, caster) castTo int)
 			.start(2., function removeEffects)

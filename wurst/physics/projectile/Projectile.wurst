@@ -37,11 +37,11 @@ package Projectile
 					onTimeout()
 			switch movement
 				case Movement.FREE
-					position += velocity
+					position += velocity*ANIMATION_PERIOD
 				case Movement.SPIN
 					position = polarProjection3d(spinCenter, spinDistance, groundAngle, airAngle)
-					groundAngle += spinSpeedGround
-					airAngle += spinSpeedAir
+					groundAngle += spinSpeedGround*ANIMATION_PERIOD
+					airAngle += spinSpeedAir*ANIMATION_PERIOD
 				case Movement.HOMING
 					skip
 					

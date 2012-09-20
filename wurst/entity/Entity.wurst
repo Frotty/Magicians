@@ -84,7 +84,7 @@ package Entity
 		
 	public abstract class DynamicEntity extends Entity
 		vec3 velocity
-		
+		boolean ignoreNextCollide = false
 		real factor = 1.
 
 		construct( vec3 pos, real radius, player p )
@@ -98,21 +98,46 @@ package Entity
 		function setForce(real x, real y, real z)
 			velocity = vec3(x,y,z)
 			
+		function setNewPos(vec3 pos)
+			this.position = pos
+		
 		override function update()
 			super.update()
-			position += velocity
+			position += velocity*ANIMATION_PERIOD
 		
 		// calculates a collision with a static entity and changes the velocity accordingly	
 		function collideWithStatic(Entity staticEntity)
-			vec2 deltaNorm = (staticEntity.position.toVec2() - position.toVec2()).norm()			
+			let delta = staticEntity.position.toVec2() - position.toVec2()
+			let deltaLen = delta.length()
+			
+			vec2 deltaNorm
+			if deltaLen == 0
+				deltaNorm = vec2(0,1)
+			else
+				deltaNorm = delta * (1/deltaLen)
+			
 	        let speedTowardsStatic = velocity.toVec2().dot(deltaNorm)
 	        if speedTowardsStatic > 0
-	        	velocity += (deltaNorm * speedTowardsStatic * -2.).toVec3()
+	        	velocity -= (deltaNorm * speedTowardsStatic * 2.0).toVec3()
+	        else if speedTowardsStatic == 0
+				// walking
+				velocity -= (deltaNorm * 300.0).toVec3()
+	        		
+	        // move entities so that the intersection is empty
+	        real intersectionWidth =  deltaLen - (radius + staticEntity.radius)
+	        setNewPos(position -  (deltaNorm * (intersectionWidth + 25)).toVec3())
+	        
+	        
 	        	
 		// calculates a collision with an other dynamic entity and updates the velocity 
 		// of _both_ entities accordingly	        	
 		// bounceFactor should be greater than 0 and less or equal to 1
 		function collideWithDynamicEntity(DynamicEntity other, real bounceFactor)
+			if ignoreNextCollide
+				ignoreNextCollide = false
+				return
+			other.ignoreNextCollide = true
+			
 			let pos1 = position.toVec2()
 			let pos2 = other.position.toVec2()
 			let vel1 = velocity.toVec2()
@@ -120,9 +145,24 @@ package Entity
 			
 			let delta = (pos2 - pos1)
 			let deltaLen = delta.length()
-			let deltaNorm = delta * (1/deltaLen)			
+			vec2 deltaNorm
+			if deltaLen == 0
+				deltaNorm = vec2(0,1)
+			else
+				deltaNorm = delta * (1/deltaLen)			
 	        real speed1central = vel1.dot(deltaNorm)
 	        real speed2central = vel2.dot(deltaNorm)
+	        
+	        
+	        // move entities so that the intersection is empty
+	        real intersectionWidth = (radius + other.radius) - deltaLen 
+	        setNewPos(position -  (deltaNorm * (intersectionWidth/2 + 5)).toVec3())
+	        other.setNewPos(other.position +  (deltaNorm * (intersectionWidth/2 + 5)).toVec3())
+			print("intersectionWidth = " + intersectionWidth.toString())
+			print("before = " + deltaLen.toString())
+			print("after = " + (other.position - position).length().toString())
+			
+
 
 	        let futurePos1 = pos1 + vel1*0.01
 	        let futurePos2 = pos2 + vel2*0.01
@@ -177,7 +217,7 @@ package Entity
 			
 			unitEntityCount++
 			
-		function setNewPos(vec3 pos)
+		override function setNewPos(vec3 pos)
 			position = pos
 			actor.setX(pos.x).setY(pos.y).setFlyHeight(pos.z, 0)
 			
@@ -186,8 +226,6 @@ package Entity
 			position = vec3( actor.getX(), actor.getY(), terrainZ )
 			
 		override function inAir()
-			super.inAir()
-			position = vec3( actor.getX(), actor.getY(), position.z )
 			
 		override function onCollision(Entity e)
 		

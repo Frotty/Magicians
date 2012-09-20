@@ -14,7 +14,7 @@ package Magician
     constant int MAGICIAN_ID = 'magi'
     constant real COLLISION_SIZE = 32.
     constant int VOID_ID = 1097101927
-    
+    constant VOID_DAMAGE_PER_SECOND = 50.
     
     public class Magician extends UnitEntity
         
@@ -40,17 +40,20 @@ package Magician
 					
             
         override function inAir()
-        	velocity += gravity
+        	velocity += gravity*ANIMATION_PERIOD
         	super.inAir()
         	
         override function onGround()
         	super.onGround()
 
         	if GetTerrainType(position.x, position.y) == VOID_ID
-                actor.setHP( actor.getHP() - 10.2 )
+                actor.setHP( actor.getHP() - VOID_DAMAGE_PER_SECOND*ANIMATION_PERIOD )
                 if actor.getHP() <= .405
                     active = false
                     AddSpecialEffect("Abilities\\Spells\\Other\\HowlOfTerror\\HowlCaster.mdl", position.x, position.y)
+                else
+                    if GetRandomReal(0,1) <= 0.3
+                    	AddSpecialEffect("Abilities\\Spells\\Undead\\AbsorbMana\\AbsorbManaBirthMissile.mdl", position.x, position.y).destr()
         	if velocity.z < -1
                 velocity = vec3(velocity.x, velocity.y, -velocity.z/2)
         	velocity *= 0.985
