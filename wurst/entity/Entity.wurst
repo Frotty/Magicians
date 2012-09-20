@@ -6,6 +6,9 @@ package Entity
 	import Arena
 	import Terrain
 	
+	// bound factor for unit-unit collision
+	public constant BOUNCE_FACTOR = 0.6
+	
 	public enum Side
 		LEFT
 		RIGHT
@@ -108,7 +111,8 @@ package Entity
 	        	
 		// calculates a collision with an other dynamic entity and updates the velocity 
 		// of _both_ entities accordingly	        	
-		function collideWithDynamicEntity(DynamicEntity other)
+		// bounceFactor should be greater than 0 and less or equal to 1
+		function collideWithDynamicEntity(DynamicEntity other, real bounceFactor)
 			let pos1 = position.toVec2()
 			let pos2 = other.position.toVec2()
 			let vel1 = velocity.toVec2()
@@ -135,8 +139,8 @@ package Entity
 		        // the central velocities are exchanged, the orthogonal velocities remain unchanged
 		        // this is similar to the collision with a wall where the velocity which is parallel to 
 		        // the wall is unchanged, whereas the other part of the velocity is inversed
-		        velocity += (vel2central - vel1central).toVec3()
-		        other.velocity += (vel1central - vel2central).toVec3()
+		        velocity += (vel2central - vel1central).toVec3() * bounceFactor
+		        other.velocity += (vel1central - vel2central).toVec3() * bounceFactor
 		
 		// bounce off the specified side		        
 		function boundsBounce(Side side)

@@ -14,6 +14,7 @@ package Magician
     constant int MAGICIAN_ID = 'magi'
     constant real COLLISION_SIZE = 32.
     
+    
     public class Magician extends UnitEntity
         
         real hp
@@ -29,7 +30,7 @@ package Magician
                 if e.isStatic
                     collideWithStatic(e)
 				else if e instanceof DynamicEntity
-					collideWithDynamicEntity(e castTo DynamicEntity)
+					collideWithDynamicEntity(e castTo DynamicEntity, BOUNCE_FACTOR)
 					
             
         override function inAir()
