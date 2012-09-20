@@ -137,6 +137,26 @@ package Entity
 		        // the wall is unchanged, whereas the other part of the velocity is inversed
 		        velocity += (vel2central - vel1central).toVec3()
 		        other.velocity += (vel1central - vel2central).toVec3()
+		
+		// bounce off the specified side		        
+		function boundsBounce(Side side)
+            switch side
+            	case Side.LEFT // Left Wall
+	                position.x = currentArena.minX + radius // Place ball against edge
+	                if velocity.x < 0
+	                	velocity.x = -velocity.x
+            	case Side.RIGHT // Right Wall
+	                position.x = currentArena.maxX - radius		// Place ball against edge
+	                if velocity.x > 0
+	                	velocity.x = -velocity.x // Reverse direction and account for friction
+            	case Side.TOP			// Top Wall
+	                position.y = currentArena.minY + radius					// Place ball against edge
+	                if velocity.y < 0
+		                velocity.y = -velocity.y
+            	case Side.BOTTOM // Bottom Wall
+	                position.y = currentArena.maxY - radius			// Place ball against edge
+	                if velocity.y > 0
+	                	velocity.y = -velocity.y 
 			
 		
 			

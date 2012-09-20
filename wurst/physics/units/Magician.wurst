@@ -43,29 +43,7 @@ package Magician
         	velocity *= 0.985
         	
         override function outOfBounds(Side side)
-            switch side
-            	case Side.LEFT
-	                print("unter minx")
-	                position.x = currentArena.minX + radius // Place ball against edge
-	                velocity.x = -velocity.x // Reverse direction and account for friction
-	                velocity.y = velocity.y
-            	case Side.RIGHT // Right Wall
-	                print("ueber maxX")
-	                position.x = currentArena.maxX - radius		// Place ball against edge
-	                velocity.x = -velocity.x // Reverse direction and account for friction
-	                velocity.y = velocity.y
-            	case Side.TOP			// Top Wall
-	                print("unter miny")
-	                position.y = currentArena.minY + radius					// Place ball against edge
-	                velocity.x = velocity.x  // Reverse direction and account for friction
-	                velocity.y = -velocity.y
-            	case Side.BOTTOM // Bottom Wall
-	                print("ueber maxY")
-	                position.y = currentArena.maxY - radius			// Place ball against edge
-	                velocity.x = velocity.x     // Reverse direction and account for friction
-	                velocity.y = -velocity.y 
-            
-            
+        	boundsBounce(side)
 
             
     public function initMagicians() //Do Shit
